@@ -1,0 +1,11 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Recruiting Analytics | Portfolio</title><link rel="stylesheet" href="../styles.css"></head><body><nav class="nav"><a class="brand" href="../index.html"><span class="brand-mark">DA</span><span>Data Analytics <span class="muted">/ Project 02</span></span></a><div class="nav-links"><a href="../index.html#projects">All projects</a></div></nav><main class="section"><div class="eyebrow">PROJECT 02 · BUSINESS OPERATIONS</div><h1 style="font-size:clamp(38px,6vw,64px);line-height:1.08;letter-spacing:-.05em">Recruiting & <span class="gradient-text">Vacancy Performance</span></h1><p class="hero-sub">A synthetic recruiting data model to analyze open roles, candidate conversion, time-to-fill, and aging vacancies.</p>
+
+<h2>Data model</h2><p>Use synthetic records only. Suggested tables: jobs, candidates, applications, recruiters. Give each entity a stable ID and define the grain of each table before joining.</p><p>See <a class="text-link" href="../docs/recruiting-data-model.md">the proposed data model</a>.</p>
+
+<h2>KPIs</h2><ul><li>Open vacancies as of the reporting date</li><li>Time-to-fill, with a documented start and end date</li><li>Application-to-interview and interview-to-hire conversion</li><li>Vacancy aging buckets and stale-update alerts</li><li>Candidate source effectiveness, with sample-size caveats</li></ul>
+
+<h2>Automation plan</h2><p>Build an n8n workflow that checks open roles daily, identifies roles above a configurable aging threshold, logs each run, and sends a test alert. Mark it as implemented only after it runs successfully.</p>
+
+<h2>Dashboard and findings</h2><p>Replace with your published dashboard URL, verified KPIs, screenshots, and evidence-based recommendations after implementation. This is a project specification, not a claim that a live system already exists.</p>
+
+<a class="button primary" href="../index.html#projects">← Back to portfolio</a></main><footer><span>Data Analytics Portfolio</span><span>Use synthetic data; do not publish candidate personal data.</span></footer></body></html>

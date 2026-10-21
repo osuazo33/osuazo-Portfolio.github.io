@@ -1,0 +1,11 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Marketing Analytics & Quality | Portfolio</title><link rel="stylesheet" href="../styles.css"></head><body><nav class="nav"><a class="brand" href="../index.html"><span class="brand-mark">DA</span><span>Data Analytics <span class="muted">/ Project 03</span></span></a><div class="nav-links"><a href="../index.html#projects">All projects</a></div></nav><main class="section"><div class="eyebrow">PROJECT 03 · ANALYTICS ENGINEERING</div><h1 style="font-size:clamp(38px,6vw,64px);line-height:1.08;letter-spacing:-.05em">Marketing Attribution & <span class="gradient-text">Quality Monitor</span></h1><p class="hero-sub">Analyze ecommerce events and design repeatable checks for data completeness, freshness, and consistency.</p>
+
+<h2>Data source</h2><p>Google Analytics 4 public ecommerce sample: <code>bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*</code>. Start with a small date range and inspect the schema before developing funnel logic.</p>
+
+<h2>Metrics</h2><ul><li>Users and sessions by source, medium, and campaign when those fields are available and correctly extracted</li><li>Product view → add-to-cart → purchase funnel, with event definitions documented</li><li>Purchase event counts and purchase value, validated against the chosen schema</li><li>Cost per acquisition and ROAS only if reliable campaign spend and attributable conversions are available</li></ul>
+
+<h2>Data quality</h2><p>Record the test name, run timestamp, affected row count, severity, and resolution for each validation. Examples: missing user identifiers, unexpected event volume, duplicated transaction IDs, and stale data.</p>
+
+<h2>SQL and dashboard</h2><p>Start with <a class="text-link" href="../sql/marketing_quality_template.sql">the SQL starter template</a>. Add the published dashboard URL and findings only after validation.</p>
+
+<a class="button primary" href="../index.html#projects">← Back to portfolio</a></main><footer><span>Data Analytics Portfolio</span><span>Document assumptions and limitations.</span></footer></body></html>
