@@ -1,11 +1,117 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Marketing Analytics & Quality | Portfolio</title><link rel="stylesheet" href="../styles.css"></head><body><nav class="nav"><a class="brand" href="../index.html"><span class="brand-mark">DA</span><span>Data Analytics <span class="muted">/ Project 03</span></span></a><div class="nav-links"><a href="../index.html#projects">All projects</a></div></nav><main class="section"><div class="eyebrow">PROJECT 03 · ANALYTICS ENGINEERING</div><h1 style="font-size:clamp(38px,6vw,64px);line-height:1.08;letter-spacing:-.05em">Marketing Attribution & <span class="gradient-text">Quality Monitor</span></h1><p class="hero-sub">Analyze ecommerce events and design repeatable checks for data completeness, freshness, and consistency.</p>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Marketing analytics brief: GA4 ecommerce funnel definitions and data-quality checks in BigQuery.">
+  <title>Marketing Analytics &amp; Quality | Portfolio</title>
+  <script>(function(){var t;try{t=localStorage.getItem("pf-theme")}catch(e){}if(t!=="light"&&t!=="dark")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";var r=document.documentElement;r.setAttribute("data-theme",t);r.classList.add("js")})();</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="../styles.css">
+  <script src="../script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <nav class="nav" aria-label="Main">
+      <a class="brand" href="../index.html">
+        <svg class="brand-mark" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="7"/><path d="M7 18l4.5-5 4 3L21 9" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="9" r="2.4"/></svg>
+        <span class="brand-name">Data Analytics <small class="muted">Portfolio</small></span>
+      </a>
+      <div class="nav-links">
+        <a href="../index.html#projects">All projects</a>
+        <a class="nav-keep" href="../dashboards/operations-monitor.html">Live dashboard</a>
+      </div>
+      <div class="nav-actions">
+        <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Switch theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+        <a class="button primary" href="https://github.com/YOUR-GITHUB-USERNAME" target="_blank" rel="noreferrer">GitHub</a>
+      </div>
+    </nav>
+  </header>
 
-<h2>Data source</h2><p>Google Analytics 4 public ecommerce sample: <code>bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*</code>. Start with a small date range and inspect the schema before developing funnel logic.</p>
+  <main id="main">
+    <div class="case-hero">
+      <a class="breadcrumb" href="../index.html#projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>All projects</a>
+      <h1>Marketing Attribution &amp; Quality Monitor</h1>
+      <p class="lead">Analyze ecommerce events and design repeatable checks for data completeness, freshness, and consistency.</p>
+      <dl class="case-facts">
+        <div><dt>Status</dt><dd>Specification</dd></div>
+        <div><dt>Data</dt><dd>GA4 public ecommerce sample</dd></div>
+        <div><dt>Tools</dt><dd>BigQuery, SQL</dd></div>
+        <div><dt>Focus</dt><dd>Funnel and data quality</dd></div>
+      </dl>
+    </div>
 
-<h2>Metrics</h2><ul><li>Users and sessions by source, medium, and campaign when those fields are available and correctly extracted</li><li>Product view → add-to-cart → purchase funnel, with event definitions documented</li><li>Purchase event counts and purchase value, validated against the chosen schema</li><li>Cost per acquisition and ROAS only if reliable campaign spend and attributable conversions are available</li></ul>
+    <div class="case-layout">
+      <nav class="case-toc" aria-label="On this page">
+        <a href="#problem">Business problem</a>
+        <a href="#data">Data source</a>
+        <a href="#metrics">Metrics</a>
+        <a href="#quality">Data quality</a>
+        <a href="#sql">SQL and dashboard</a>
+      </nav>
+      <div class="case-body">
+        <section id="problem">
+          <h2>Business problem</h2>
+          <p>Marketing reports are only as good as the event data behind them. Missing identifiers, duplicated purchases or a silent tracking outage can make a campaign look better or worse than it is.</p>
+          <p><strong>Objective:</strong> a documented product funnel and a set of quality checks that run before anyone reads conversion or revenue figures.</p>
+        </section>
 
-<h2>Data quality</h2><p>Record the test name, run timestamp, affected row count, severity, and resolution for each validation. Examples: missing user identifiers, unexpected event volume, duplicated transaction IDs, and stale data.</p>
+        <section id="data">
+          <h2>Data source</h2>
+          <p>Google Analytics 4 public ecommerce sample: <code>bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*</code>. Start with a small date range and inspect the schema before developing funnel logic.</p>
+        </section>
 
-<h2>SQL and dashboard</h2><p>Start with <a class="text-link" href="../sql/marketing_quality_template.sql">the SQL starter template</a>. Add the published dashboard URL and findings only after validation.</p>
+        <section id="metrics">
+          <h2>Metrics</h2>
+          <ul>
+            <li>Users and sessions by source, medium, and campaign when those fields are available and correctly extracted</li>
+            <li>Product view, add-to-cart and purchase funnel, with event definitions documented</li>
+            <li>Purchase event counts and purchase value, validated against the chosen schema</li>
+            <li>Cost per acquisition and ROAS only if reliable campaign spend and attributable conversions are available</li>
+          </ul>
+          <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg><p>ROAS requires a valid campaign-spend dataset and attributable revenue. It is not reported until those inputs are available.</p></div>
+        </section>
 
-<a class="button primary" href="../index.html#projects">← Back to portfolio</a></main><footer><span>Data Analytics Portfolio</span><span>Document assumptions and limitations.</span></footer></body></html>
+        <section id="quality">
+          <h2>Data quality</h2>
+          <p>Record the test name, run timestamp, affected row count, severity, and resolution for each validation.</p>
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead><tr><th>Check</th><th>Rule</th><th>Severity</th></tr></thead>
+              <tbody>
+                <tr><td>Missing user identifiers</td><td><code>user_pseudo_id IS NULL</code> per day and event</td><td><span class="pill is-high">High</span></td></tr>
+                <tr><td>Duplicated transaction IDs</td><td>More than one purchase event per transaction</td><td><span class="pill is-high">High</span></td></tr>
+                <tr><td>Unexpected event volume</td><td>Daily rows outside a documented baseline range</td><td><span class="pill is-medium">Medium</span></td></tr>
+                <tr><td>Stale data</td><td>No events for the latest expected date</td><td><span class="pill is-medium">Medium</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="figure-caption">Severity levels are proposed and will be confirmed when the checks run.</p>
+        </section>
+
+        <section id="sql">
+          <h2>SQL and dashboard</h2>
+          <p>Start with <a class="text-link" href="../sql/marketing_quality_template.sql">the SQL starter template</a>, which profiles event rows and missing user IDs over one week. The published dashboard URL and findings will be added only after validation.</p>
+        </section>
+      </div>
+    </div>
+
+    <div class="case-next">
+      <a href="../dashboards/operations-monitor.html"><span><small>Next project</small><strong>Operations Monitor, live dashboard</strong></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-row">
+      <span>© <span data-year></span> Data Analytics Portfolio</span>
+      <span>Assumptions and limitations are documented with each project.</span>
+    </div>
+  </footer>
+</body>
+</html>

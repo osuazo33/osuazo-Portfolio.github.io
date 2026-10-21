@@ -4,98 +4,245 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Data analytics portfolio focused on SQL, BigQuery, automation, data quality, and business intelligence.">
+  <meta name="theme-color" content="#f5f5f2" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0e0e0e" media="(prefers-color-scheme: dark)">
   <title>Data Analytics & Automation | Portfolio</title>
+  <script>(function(){var t;try{t=localStorage.getItem("pf-theme")}catch(e){}if(t!=="light"&&t!=="dark")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";var r=document.documentElement;r.setAttribute("data-theme",t);r.classList.add("js")})();</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="styles.css">
+  <script src="assets/js/ops-data.js" defer></script>
+  <script src="assets/js/charts.js" defer></script>
+  <script src="script.js" defer></script>
 </head>
 <body>
-  <nav class="nav">
-    <a class="brand" href="#home"><span class="brand-mark">DA</span><span>Data Analytics<span class="muted"> / Portfolio</span></span></a>
-    <div class="nav-links">
-      <a href="#projects">Projects</a><a href="#skills">Technical Skills</a><a href="#about">About</a>
-      <a class="nav-cta" href="https://github.com/YOUR-GITHUB-USERNAME" target="_blank" rel="noreferrer">GitHub ↗</a>
-    </div>
-  </nav>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-  <main>
-    <section class="hero section" id="home">
-      <div class="hero-copy">
-        <div class="eyebrow"><span class="pulse"></span> DATA ANALYTICS · AUTOMATION · BI</div>
-        <h1>Turning raw data into <span class="gradient-text">reliable decisions.</span></h1>
+  <header class="site-header">
+    <nav class="nav" aria-label="Main">
+      <a class="brand" href="#main">
+        <svg class="brand-mark" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="7"/><path d="M7 18l4.5-5 4 3L21 9" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="9" r="2.4"/></svg>
+        <span class="brand-name">Data Analytics <small class="muted">Portfolio</small></span>
+      </a>
+      <div class="nav-links">
+        <a href="#projects">Projects</a>
+        <a class="nav-keep" href="dashboards/operations-monitor.html">Live dashboard</a>
+        <a href="#approach">Approach</a>
+        <a href="#about">About</a>
+      </div>
+      <div class="nav-actions">
+        <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Switch theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+        <a class="button primary" href="https://github.com/YOUR-GITHUB-USERNAME" target="_blank" rel="noreferrer">GitHub</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div>
+        <h1 id="hero-title">Turning raw data into reliable decisions.</h1>
         <p class="hero-sub">I build analytical workflows, validate data, and transform business questions into clear, actionable reporting.</p>
         <div class="hero-actions">
-          <a class="button primary" href="#projects">Explore projects <span>↓</span></a>
-          <a class="button secondary" href="https://github.com/YOUR-GITHUB-USERNAME" target="_blank" rel="noreferrer">View source code ↗</a>
+          <a class="button primary" href="#projects">Explore projects</a>
+          <a class="button secondary" href="dashboards/operations-monitor.html">Open the live dashboard</a>
         </div>
-        <div class="hero-meta"><span>SQL & BigQuery</span><span>ETL & n8n</span><span>Business Intelligence</span></div>
+        <ul class="hero-proof">
+          <li>SQL &amp; BigQuery</li>
+          <li>ETL &amp; n8n</li>
+          <li>Data quality</li>
+          <li>Business Intelligence</li>
+        </ul>
       </div>
-      <div class="hero-visual" aria-label="Illustrative data visualization">
-        <div class="visual-top"><span class="window-dots"><i></i><i></i><i></i></span><span>ANALYTICS OVERVIEW</span><span class="live-label">● PORTFOLIO</span></div>
-        <div class="visual-kpis">
-          <div><small>Data quality</small><strong>Validated</strong><em>Checks documented</em></div>
-          <div><small>Pipeline status</small><strong>Monitored</strong><em>Failures & retries</em></div>
+
+      <figure class="fragment" id="hero-fragment" data-ui aria-label="Live preview of the Operations Monitor dashboard, using simulated orders">
+        <div class="fragment-head">
+          <span class="live-dot is-paused" aria-hidden="true"></span>
+          <strong>Operations Monitor</strong>
+          <span class="source">Simulated orders · last 30 min</span>
         </div>
-        <div class="chart-label"><span>Business performance</span><span class="chart-legend"><i></i> Trend (illustrative)</span></div>
-        <svg class="chart" viewBox="0 0 500 180" role="img" aria-label="Illustrative trend line">
-          <defs><linearGradient id="area" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#67e8f9" stop-opacity=".3"/><stop offset="100%" stop-color="#67e8f9" stop-opacity="0"/></linearGradient></defs>
-          <g class="grid-lines"><path d="M0 30H500 M0 70H500 M0 110H500 M0 150H500"/></g>
-          <path class="chart-area" d="M0 140 C40 130 55 115 90 122 S145 88 180 100 S230 65 270 82 S325 35 360 56 S425 20 500 28 L500 180 L0 180 Z"/>
-          <path class="chart-line" d="M0 140 C40 130 55 115 90 122 S145 88 180 100 S230 65 270 82 S325 35 360 56 S425 20 500 28"/>
-          <circle cx="360" cy="56" r="5"/><circle cx="500" cy="28" r="5"/>
-        </svg>
-        <div class="chart-months"><span>Period 1</span><span>Period 2</span><span>Period 3</span><span>Period 4</span><span>Period 5</span></div>
-        <p class="visual-note">Illustrative design only — replace with verified project results and live dashboard embeds.</p>
-      </div>
+        <div class="fragment-kpis">
+          <div><small>Orders</small><b class="num" data-k="orders">—</b></div>
+          <div><small>Completed revenue</small><b class="num" data-k="revenue">—</b></div>
+          <div><small>Payment success</small><b class="num" data-k="success">—</b></div>
+        </div>
+        <div class="fragment-chart-label"><span>Order value placed, rolling 5 minutes</span><span>every 4 s</span></div>
+        <div class="fragment-chart"></div>
+        <figcaption class="fragment-foot">
+          <span data-k="updated">Demo data, not company results</span>
+          <a href="dashboards/operations-monitor.html">Open dashboard →</a>
+        </figcaption>
+      </figure>
     </section>
 
-    <section class="trust-strip">
-      <span>BUILT AROUND REAL ANALYTICS WORKFLOWS</span>
-      <div><b>SQL</b><b>BigQuery</b><b>n8n</b><b>Looker Studio</b><b>GitHub</b></div>
+    <section class="tools-strip" aria-label="Tools">
+      <span>Built around real analytics workflows</span>
+      <ul><li>SQL</li><li>BigQuery</li><li>n8n</li><li>Looker Studio</li><li>GitHub</li></ul>
     </section>
 
-    <section class="section" id="projects">
-      <div class="section-heading">
-        <div><div class="eyebrow">SELECTED WORK</div><h2>Projects built to solve business problems.</h2></div>
-        <p>End-to-end examples covering data preparation, analysis, quality assurance, and reporting.</p>
+    <section class="section" id="projects" aria-labelledby="projects-title">
+      <div class="section-head">
+        <h2 id="projects-title">Projects built to solve business problems.</h2>
+        <p>End-to-end examples covering data preparation, analysis, quality assurance, and reporting. Each one says where its data comes from and what is still in progress.</p>
       </div>
-      <div class="project-grid">
-        <article class="project-card featured">
-          <div class="project-art sales-art"><div class="art-caption">01 / SALES INTELLIGENCE</div><div class="mini-bars"><i style="height:35%"></i><i style="height:54%"></i><i style="height:43%"></i><i style="height:72%"></i><i style="height:63%"></i><i style="height:92%"></i><i style="height:78%"></i></div><div class="art-line">Revenue · Orders · Delivery</div></div>
-          <div class="project-body"><div class="project-type">FLAGSHIP PROJECT</div><h3>Sales Intelligence & Revenue Pipeline</h3><p>Analyze orders, payments, products, and delivery performance. Build a documented SQL model and a repeatable data pipeline.</p><div class="tags"><span>BigQuery SQL</span><span>ETL</span><span>Data quality</span><span>BI</span></div><div class="project-links"><a href="projects/sales-intelligence.html">Project details ↗</a><a href="sql/README.md">SQL files ↗</a></div></div>
+
+      <div class="project-list">
+        <article class="project reveal">
+          <div class="project-figure">
+            <svg class="diagram" viewBox="0 0 420 220" role="img" aria-label="Data flow: DummyJSON product catalog and a browser simulation feed KPIs, charts, the orders table and alerts">
+              <rect class="d-box" x="8" y="30" width="150" height="56" rx="8"/>
+              <text x="22" y="54">Product catalog</text><text class="d-muted" x="22" y="72">DummyJSON API</text>
+              <rect class="d-box" x="8" y="134" width="150" height="56" rx="8"/>
+              <text x="22" y="158">Order simulation</text><text class="d-muted" x="22" y="176">in the browser, every 4 s</text>
+              <path class="d-line" d="M158 58h40v52h24M158 162h40v-52"/>
+              <rect class="d-box-accent" x="222" y="82" width="190" height="56" rx="8"/>
+              <text x="236" y="106">One set of order rows</text><text class="d-muted" x="236" y="124">KPIs · charts · table · alerts</text>
+            </svg>
+            <p class="figure-caption">Every view is computed from the same rows, so the KPIs, charts and table always agree.</p>
+          </div>
+          <div class="project-body">
+            <span class="project-status is-live">Live demo · simulated orders</span>
+            <h3>Operations Monitor</h3>
+            <p>A real-time view of an online store's order flow: volume, completed revenue, payment success, the open-order queue and the categories driving revenue, with an interactive orders table and event alerts.</p>
+            <dl class="project-facts">
+              <dt>Question</dt><dd>Are orders coming in and getting paid right now?</dd>
+              <dt>Data</dt><dd>Product catalog from the DummyJSON API; orders simulated</dd>
+              <dt>Built with</dt><dd>JavaScript, SVG charts, polling</dd>
+            </dl>
+            <div class="project-links">
+              <a href="dashboards/operations-monitor.html">Open dashboard <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+              <a href="assets/js/ops-data.js">Data model source</a>
+            </div>
+          </div>
         </article>
-        <article class="project-card">
-          <div class="project-art hiring-art"><div class="art-caption">02 / RECRUITING ANALYTICS</div><div class="funnel"><i>Applications</i><i>Interviews</i><i>Offers</i><i>Hires</i></div></div>
-          <div class="project-body"><div class="project-type">BUSINESS OPERATIONS</div><h3>Recruiting & Vacancy Performance</h3><p>Model a candidate funnel, monitor aging vacancies, and measure time-to-fill using synthetic data.</p><div class="tags"><span>SQL</span><span>Funnel analysis</span><span>Synthetic data</span></div><div class="project-links"><a href="projects/recruiting-analytics.html">Project brief ↗</a><a href="docs/recruiting-data-model.md">Data model ↗</a></div></div>
+
+        <article class="project is-flipped reveal">
+          <div class="project-figure">
+            <svg class="diagram" viewBox="0 0 420 230" role="img" aria-label="Pipeline: Olist CSV files into BigQuery, SQL model with explicit grain, quality checks, then Looker Studio">
+              <rect class="d-box" x="8" y="20" width="120" height="50" rx="8"/><text x="22" y="42">Olist CSVs</text><text class="d-muted" x="22" y="59">public dataset</text>
+              <rect class="d-box" x="150" y="20" width="120" height="50" rx="8"/><text x="164" y="42">BigQuery</text><text class="d-muted" x="164" y="59">source tables</text>
+              <rect class="d-box-accent" x="292" y="20" width="120" height="50" rx="8"/><text x="306" y="42">SQL model</text><text class="d-muted" x="306" y="59">explicit grain</text>
+              <path class="d-line" d="M128 45h22M270 45h22M352 70v40"/>
+              <rect class="d-box" x="292" y="110" width="120" height="50" rx="8"/><text x="306" y="132">Quality checks</text><text class="d-muted" x="306" y="149">5 exception queries</text>
+              <path class="d-line" d="M352 160v20H210v10"/>
+              <rect class="d-box" x="150" y="170" width="120" height="50" rx="8" stroke-dasharray="4 3"/><text x="164" y="192">Looker Studio</text><text class="d-muted" x="164" y="209">dashboard, pending</text>
+            </svg>
+            <p class="figure-caption">Item revenue and payments are aggregated to the order before joining, so totals are not inflated.</p>
+          </div>
+          <div class="project-body">
+            <span class="project-status is-progress">Flagship · SQL written, dashboard in progress</span>
+            <h3>Sales Intelligence &amp; Revenue Pipeline</h3>
+            <p>Analyze orders, payments, products, and delivery performance. Build a documented SQL model and a repeatable data pipeline.</p>
+            <dl class="project-facts">
+              <dt>Data</dt><dd>Olist Brazilian e-commerce, public (Kaggle)</dd>
+              <dt>KPIs</dt><dd>Orders, item revenue, payments, on-time delivery</dd>
+              <dt>Built with</dt><dd>BigQuery SQL, ETL, data quality, BI</dd>
+            </dl>
+            <div class="project-links">
+              <a href="projects/sales-intelligence.html">Read the case study <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+              <a href="sql/README.md">SQL files</a>
+            </div>
+          </div>
         </article>
-        <article class="project-card">
-          <div class="project-art marketing-art"><div class="art-caption">03 / MARKETING & QA</div><div class="metric-row"><div><small>Conversion</small><b>Funnel</b></div><div><small>Quality</small><b>Checks</b></div><div><small>Spend</small><b>ROAS*</b></div></div></div>
-          <div class="project-body"><div class="project-type">ANALYTICS ENGINEERING</div><h3>Marketing Attribution & Quality Monitor</h3><p>Analyze ecommerce events and define data-quality checks for missing, duplicate, or unexpected records.</p><div class="tags"><span>GA4 sample</span><span>BigQuery</span><span>Monitoring</span></div><div class="project-links"><a href="projects/marketing-quality.html">Project brief ↗</a><a href="sql/marketing_quality_template.sql">SQL template ↗</a></div></div>
+
+        <article class="project reveal">
+          <div class="project-figure">
+            <div class="funnel-steps" role="img" aria-label="Recruiting funnel: applications, interviews, offers, hires">
+              <div><b>Applications</b><span>eligible cohort</span></div>
+              <div><b>Interviews</b><span>÷ applications</span></div>
+              <div><b>Offers</b><span>÷ interviews</span></div>
+              <div><b>Hires</b><span>time-to-fill ends here</span></div>
+            </div>
+            <p class="figure-caption">Each conversion has one documented numerator and denominator. Synthetic data only.</p>
+          </div>
+          <div class="project-body">
+            <span class="project-status">Specification · synthetic data</span>
+            <h3>Recruiting &amp; Vacancy Performance</h3>
+            <p>Model a candidate funnel, monitor aging vacancies, and measure time-to-fill using synthetic data.</p>
+            <dl class="project-facts">
+              <dt>KPIs</dt><dd>Open vacancies, time-to-fill, stage conversion, aging</dd>
+              <dt>Built with</dt><dd>SQL, funnel analysis, n8n alert plan</dd>
+            </dl>
+            <div class="project-links">
+              <a href="projects/recruiting-analytics.html">Read the brief <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+              <a href="docs/recruiting-data-model.md">Data model</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project is-flipped reveal">
+          <div class="project-figure">
+            <ul class="check-list" aria-label="Example data-quality checks">
+              <li>Missing user identifiers <span class="pill is-high">High</span></li>
+              <li>Duplicated transaction IDs <span class="pill is-high">High</span></li>
+              <li>Unexpected event volume <span class="pill is-medium">Medium</span></li>
+              <li>Stale data, no load today <span class="pill is-medium">Medium</span></li>
+            </ul>
+            <p class="figure-caption">Each check logs its name, run time, affected rows, severity and resolution.</p>
+          </div>
+          <div class="project-body">
+            <span class="project-status">Specification · public GA4 sample</span>
+            <h3>Marketing Attribution &amp; Quality Monitor</h3>
+            <p>Analyze ecommerce events and define data-quality checks for missing, duplicate, or unexpected records.</p>
+            <dl class="project-facts">
+              <dt>Data</dt><dd>GA4 obfuscated ecommerce sample in BigQuery</dd>
+              <dt>Built with</dt><dd>BigQuery, monitoring, funnel definitions</dd>
+            </dl>
+            <div class="project-links">
+              <a href="projects/marketing-quality.html">Read the brief <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+              <a href="sql/marketing_quality_template.sql">SQL template</a>
+            </div>
+          </div>
         </article>
       </div>
-      <p class="footnote">*ROAS requires a valid campaign-spend dataset and attributable revenue. Do not report it until those inputs are available. Project cards are templates until data, findings, screenshots, and working links are added.</p>
     </section>
 
-    <section class="section skills-section" id="skills">
-      <div class="section-heading"><div><div class="eyebrow">TOOLKIT</div><h2>Technical approach</h2></div><p>Focused on traceable transformations, repeatable workflows, and trustworthy reporting.</p></div>
-      <div class="skills-grid">
-        <div class="skill"><span class="skill-icon">SQL</span><h3>Query & model</h3><p>Joins, CTEs, window functions, aggregations, staging tables, and metric definitions.</p></div>
-        <div class="skill"><span class="skill-icon">BQ</span><h3>BigQuery</h3><p>Analytical datasets, transformations, partition-aware querying, and cost-conscious exploration.</p></div>
-        <div class="skill"><span class="skill-icon">↻</span><h3>Automation</h3><p>n8n workflow orchestration, execution logging, retries, and failure notifications.</p></div>
-        <div class="skill"><span class="skill-icon">✓</span><h3>Data quality</h3><p>Null checks, uniqueness, referential integrity, reconciliations, and freshness checks.</p></div>
-        <div class="skill"><span class="skill-icon">BI</span><h3>Dashboards</h3><p>Clear KPIs, consistent definitions, filters, trends, and business recommendations.</p></div>
-        <div class="skill"><span class="skill-icon">Git</span><h3>Version control</h3><p>Readable commits, documentation, reproducible project structure, and safe secrets handling.</p></div>
+    <section class="section" id="approach" aria-labelledby="approach-title">
+      <div class="approach">
+        <div class="approach-aside">
+          <h2 id="approach-title">Technical approach</h2>
+          <p>Focused on traceable transformations, repeatable workflows, and trustworthy reporting. The metric is defined before the query is written, and the data is tested before anyone reads the chart.</p>
+          <div class="skill-groups">
+            <div><small>Query &amp; model</small><ul class="chips"><li>SQL</li><li>CTEs</li><li>Window functions</li><li>BigQuery</li></ul></div>
+            <div><small>Data quality</small><ul class="chips"><li>Null checks</li><li>Uniqueness</li><li>Referential integrity</li><li>Reconciliation</li><li>Freshness</li></ul></div>
+            <div><small>Report &amp; automate</small><ul class="chips"><li>Looker Studio</li><li>n8n</li><li>Git &amp; GitHub</li></ul></div>
+          </div>
+        </div>
+        <ol class="approach-steps">
+          <li><b>Query &amp; model</b><span>Joins, CTEs, window functions, aggregations, staging tables, and metric definitions.</span></li>
+          <li><b>BigQuery</b><span>Analytical datasets, transformations, partition-aware querying, and cost-conscious exploration.</span></li>
+          <li><b>Data quality</b><span>Null checks, uniqueness, referential integrity, reconciliations, and freshness checks.</span></li>
+          <li><b>Dashboards</b><span>Clear KPIs, consistent definitions, filters, trends, and business recommendations.</span></li>
+          <li><b>Automation</b><span>n8n workflow orchestration, execution logging, retries, and failure notifications.</span></li>
+          <li><b>Version control</b><span>Readable commits, documentation, reproducible project structure, and safe secrets handling.</span></li>
+        </ol>
       </div>
     </section>
 
-    <section class="section about-section" id="about">
-      <div class="about-panel">
-        <div class="eyebrow">ABOUT</div><h2>Analysis should be reliable, not just attractive.</h2>
-        <p>I am a data analyst with 3+ years of experience in data analysis and reporting. I focus on translating operational data into useful insights and improving the reliability of recurring reporting processes.</p>
-        <p class="muted">Before publishing, personalize this section with your actual experience, tools, and measurable accomplishments. Do not claim tools or results you cannot demonstrate.</p>
-        <div class="about-actions"><a class="button primary" href="https://github.com/YOUR-GITHUB-USERNAME" target="_blank" rel="noreferrer">Explore my GitHub ↗</a><a class="text-link" href="mailto:YOUR_EMAIL@example.com">Contact me ↗</a></div>
+    <section class="section" id="about" aria-labelledby="about-title">
+      <div class="about reveal">
+        <h2 id="about-title">Analysis should be reliable, not just attractive.</h2>
+        <div>
+          <p>I am a data analyst with 3+ years of experience in data analysis and reporting. I focus on translating operational data into useful insights and improving the reliability of recurring reporting processes.</p>
+          <!-- Before publishing, personalize this section with your actual experience, tools, and measurable accomplishments. Do not claim tools or results you cannot demonstrate. -->
+          <div class="about-actions">
+            <a class="button primary" href="https://github.com/YOUR-GITHUB-USERNAME" target="_blank" rel="noreferrer">Explore my GitHub</a>
+            <a class="button secondary" href="mailto:YOUR_EMAIL@example.com">Contact me</a>
+          </div>
+        </div>
       </div>
     </section>
   </main>
-  <footer><span>© <span id="year"></span> Data Analytics Portfolio</span><span>Built for clarity, reproducibility, and business impact.</span></footer>
-  <script src="script.js"></script>
+
+  <footer class="site-footer">
+    <div class="wordmark">Data Analytics Portfolio</div>
+    <div class="footer-row">
+      <span>© <span data-year></span> · Built for clarity, reproducibility, and business impact.</span>
+      <span>Demo and synthetic data are labelled wherever they appear.</span>
+    </div>
+  </footer>
 </body>
 </html>

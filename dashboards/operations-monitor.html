@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Operations Monitor: a real-time order analytics dashboard with KPIs, animated charts, an interactive orders table and event alerts. Orders are simulated; the product catalog comes from the DummyJSON API.">
+  <meta name="theme-color" content="#f5f5f2" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0e0e0e" media="(prefers-color-scheme: dark)">
+  <title>Operations Monitor | Data Analytics Portfolio</title>
+  <script>(function(){var t;try{t=localStorage.getItem("pf-theme")}catch(e){}if(t!=="light"&&t!=="dark")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";var r=document.documentElement;r.setAttribute("data-theme",t);r.classList.add("js");try{if(localStorage.getItem("ops-sidebar")==="collapsed")r.setAttribute("data-sidebar","collapsed")}catch(e){}})();</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="dashboard.css">
+  <script src="../assets/js/ops-data.js" defer></script>
+  <script src="../assets/js/charts.js" defer></script>
+  <script src="../script.js" defer></script>
+  <script src="dashboard.js" defer></script>
+</head>
+<body class="app">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Dashboard">
+      <div class="sidebar-head">
+        <a class="brand" href="#overview">
+          <svg class="brand-mark" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="7"/><path d="M7 18l4.5-5 4 3L21 9" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="9" r="2.4"/></svg>
+          <span class="sb-label">Operations Monitor<small>Demo store</small></span>
+        </a>
+        <button class="icon-button sb-close" type="button" data-sidebar-close aria-label="Close menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <nav class="sb-nav" aria-label="Sections">
+        <span class="sb-indicator" aria-hidden="true"></span>
+        <a href="#overview" data-label="Dashboard" aria-current="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z"/></svg>
+          <span class="sb-label">Dashboard</span>
+        </a>
+        <a href="#analytics" data-label="Analytics">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+          <span class="sb-label">Analytics</span>
+        </a>
+        <a href="#orders" data-label="Reports">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4M16 13H8M16 17H8M10 9H8"/></svg>
+          <span class="sb-label">Reports</span>
+        </a>
+        <a href="#settings" data-label="Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M21 4h-7M10 4H3M21 12h-9M8 12H3M21 20h-5M12 20H3M14 2v4M8 10v4M16 18v4"/></svg>
+          <span class="sb-label">Settings</span>
+        </a>
+        <a href="#help" data-label="Help">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
+          <span class="sb-label">Help</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-foot">
+        <a class="sb-back" href="../index.html" data-label="Back to portfolio">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <span class="sb-label">Back to portfolio</span>
+        </a>
+        <button class="sb-collapse" type="button" data-sidebar-collapse aria-label="Collapse sidebar" aria-expanded="true" data-label="Expand sidebar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
+          <span class="sb-label">Collapse</span>
+        </button>
+      </div>
+    </aside>
+    <div class="sidebar-backdrop" data-sidebar-close aria-hidden="true"></div>
+
+    <div class="app-main">
+      <header class="topbar">
+        <button class="icon-button sb-open" type="button" data-sidebar-open aria-label="Open menu" aria-controls="sidebar" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div class="topbar-title">
+          <h1>Orders overview</h1>
+          <p class="data-status" id="data-status" role="status">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span data-status-mode>Connecting to the catalog API…</span>
+            <span class="status-time num" data-status-time></span>
+          </p>
+        </div>
+        <div class="topbar-actions">
+          <button class="button secondary pause-btn" type="button" data-pause aria-pressed="false">
+            <svg class="i-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+            <svg class="i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5Z"/></svg>
+            <span data-pause-label>Pause</span>
+          </button>
+          <div class="notif">
+            <button class="icon-button notif-btn" type="button" data-notif-toggle aria-expanded="false" aria-controls="notif-panel" aria-label="Notifications">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+              <span class="notif-count num" data-notif-count hidden></span>
+            </button>
+            <div class="notif-panel" id="notif-panel" role="dialog" aria-label="Notifications" hidden>
+              <div class="notif-head">
+                <div><strong>Notifications</strong><span class="pill">Demo events</span></div>
+                <button class="link-button" type="button" data-notif-clear>Clear all</button>
+              </div>
+              <ul class="notif-list" data-notif-list></ul>
+              <p class="notif-foot">Generated from the simulated orders every 10–30 seconds while updates run.</p>
+            </div>
+          </div>
+          <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Switch theme">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <main id="main" class="app-content">
+        <noscript><p class="panel">This dashboard needs JavaScript to simulate and draw its data. The project write-up is in the <a class="text-link" href="#help">Help</a> section and on the <a class="text-link" href="../index.html">portfolio</a>.</p></noscript>
+
+        <section id="overview" class="app-section" aria-labelledby="overview-title">
+          <div class="finding">
+            <h2 id="overview-title" class="visually-hidden">Dashboard</h2>
+            <p data-finding>Loading the last 30 minutes of orders…</p>
+            <button class="button secondary small" type="button" data-review-failed hidden>Review failed payments</button>
+          </div>
+
+          <div class="kpi-grid" data-kpi-grid aria-label="Key metrics, last 30 minutes. Cards can be reordered.">
+            <article class="kpi" data-kpi="orders">
+              <div class="kpi-head"><h3>Orders</h3><button class="kpi-handle" type="button" aria-label="Move Orders card" aria-haspopup="menu"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="9" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg></button></div>
+              <p class="kpi-value num" data-value-for="orders"><span class="skeleton" style="width:60%"></span></p>
+              <p class="kpi-delta" data-delta-for="orders">&nbsp;</p>
+            </article>
+            <article class="kpi" data-kpi="revenue">
+              <div class="kpi-head"><h3>Completed revenue</h3><button class="kpi-handle" type="button" aria-label="Move Completed revenue card" aria-haspopup="menu"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="9" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg></button></div>
+              <p class="kpi-value num" data-value-for="revenue"><span class="skeleton" style="width:70%"></span></p>
+              <p class="kpi-delta" data-delta-for="revenue">&nbsp;</p>
+            </article>
+            <article class="kpi" data-kpi="success">
+              <div class="kpi-head"><h3>Payment success</h3><button class="kpi-handle" type="button" aria-label="Move Payment success card" aria-haspopup="menu"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="9" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg></button></div>
+              <p class="kpi-value num" data-value-for="success"><span class="skeleton" style="width:50%"></span></p>
+              <p class="kpi-delta" data-delta-for="success">&nbsp;</p>
+            </article>
+            <article class="kpi" data-kpi="aov">
+              <div class="kpi-head"><h3>Average order value</h3><button class="kpi-handle" type="button" aria-label="Move Average order value card" aria-haspopup="menu"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="9" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg></button></div>
+              <p class="kpi-value num" data-value-for="aov"><span class="skeleton" style="width:55%"></span></p>
+              <p class="kpi-delta" data-delta-for="aov">&nbsp;</p>
+            </article>
+          </div>
+
+          <div class="grid-2-1">
+            <article class="card">
+              <div class="card-head">
+                <div><h3>Order value placed</h3><p>Rolling 5-minute total, sampled at every update</p></div>
+                <span class="card-meta num" data-line-last></span>
+              </div>
+              <div class="chart-box chart-lg" data-chart="line"><div class="skeleton skeleton-chart"></div></div>
+            </article>
+            <article class="card">
+              <div class="card-head"><div><h3>Order status</h3><p>Orders placed in the last 30 minutes</p></div></div>
+              <div class="ring-wrap">
+                <div class="ring-box" data-chart="ring"><div class="ring-center"><b class="num" data-ring-total>—</b><span>orders</span></div></div>
+                <table class="legend-table" data-ring-legend aria-label="Order status breakdown"></table>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section id="analytics" class="app-section" aria-labelledby="analytics-title">
+          <h2 id="analytics-title" class="section-title">Analytics</h2>
+          <div class="grid-1-1">
+            <article class="card">
+              <div class="card-head">
+                <div><h3>Orders per 5 minutes</h3><p>Last hour. The dashed bar is the bucket still filling.</p></div>
+              </div>
+              <div class="chart-box" data-chart="columns"><div class="skeleton skeleton-chart"></div></div>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <div><h3>Open orders</h3><p>Waiting for payment confirmation, at each update</p></div>
+                <span class="card-meta num" data-open-now></span>
+              </div>
+              <div class="chart-box" data-chart="area"><div class="skeleton skeleton-chart"></div></div>
+            </article>
+          </div>
+          <article class="card">
+            <div class="card-head">
+              <div><h3>Revenue by category</h3><p>Completed revenue, last 30 minutes. Top five categories and the rest grouped.</p></div>
+            </div>
+            <ol class="cat-list" data-categories></ol>
+          </article>
+        </section>
+
+        <section id="orders" class="app-section" aria-labelledby="orders-title">
+          <article class="card table-card">
+            <div class="card-head table-head">
+              <div><h2 id="orders-title" class="card-title">Recent orders</h2><p data-table-summary>Orders from the last 70 minutes</p></div>
+              <div class="seg" role="group" aria-label="Filter by status" data-status-filter>
+                <button type="button" data-filter="all" aria-pressed="true">All</button>
+                <button type="button" data-filter="completed" aria-pressed="false">Completed</button>
+                <button type="button" data-filter="pending" aria-pressed="false">Pending</button>
+                <button type="button" data-filter="failed" aria-pressed="false">Failed</button>
+                <button type="button" data-filter="refunded" aria-pressed="false">Refunded</button>
+              </div>
+            </div>
+            <div class="table-scroll">
+              <table class="orders-table">
+                <caption class="visually-hidden">Recent orders, simulated. Column headers sort the table.</caption>
+                <thead>
+                  <tr>
+                    <th scope="col" data-sort="id"><button type="button">Order</button></th>
+                    <th scope="col" data-sort="t" aria-sort="descending"><button type="button">Placed</button></th>
+                    <th scope="col" data-sort="customer"><button type="button">Customer</button></th>
+                    <th scope="col" data-sort="categoryLabel" class="col-cat"><button type="button">Category</button></th>
+                    <th scope="col" data-sort="status"><button type="button">Status</button></th>
+                    <th scope="col" data-sort="amount" class="num"><button type="button">Amount</button></th>
+                    <th scope="col" class="col-action"><span class="visually-hidden">Details</span></th>
+                  </tr>
+                </thead>
+                <tbody data-rows>
+                  <tr class="skeleton-row"><td colspan="7"><span class="skeleton"></span></td></tr>
+                  <tr class="skeleton-row"><td colspan="7"><span class="skeleton"></span></td></tr>
+                  <tr class="skeleton-row"><td colspan="7"><span class="skeleton"></span></td></tr>
+                </tbody>
+              </table>
+              <div class="table-empty" data-table-empty hidden>
+                <p data-empty-text>No orders match this filter.</p>
+                <button class="button secondary small" type="button" data-filter-reset>Show all orders</button>
+              </div>
+            </div>
+            <div class="table-foot">
+              <label class="page-size">Rows
+                <select data-page-size>
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                </select>
+              </label>
+              <span class="num" data-page-info></span>
+              <div class="pager">
+                <button class="icon-button" type="button" data-page="-1" aria-label="Previous page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+                <button class="icon-button" type="button" data-page="1" aria-label="Next page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section id="settings" class="app-section" aria-labelledby="settings-title">
+          <h2 id="settings-title" class="section-title">Settings</h2>
+          <article class="card settings">
+            <div class="setting">
+              <div><h3>Live updates</h3><p>Polling interval for the simulation. Updates stop while the tab is hidden.</p></div>
+              <div class="seg" role="group" aria-label="Update interval" data-interval>
+                <button type="button" data-ms="3000" aria-pressed="false">3 s</button>
+                <button type="button" data-ms="4000" aria-pressed="true">4 s</button>
+                <button type="button" data-ms="5000" aria-pressed="false">5 s</button>
+              </div>
+            </div>
+            <div class="setting">
+              <div><h3>Theme</h3><p>System follows your device setting.</p></div>
+              <div class="seg" role="group" aria-label="Theme" data-theme-mode>
+                <button type="button" data-mode="system" aria-pressed="true">System</button>
+                <button type="button" data-mode="light" aria-pressed="false">Light</button>
+                <button type="button" data-mode="dark" aria-pressed="false">Dark</button>
+              </div>
+            </div>
+            <div class="setting">
+              <div><h3>Card layout</h3><p>Drag a metric card by its handle, or use the arrow keys on the handle. The order is saved in this browser.</p></div>
+              <button class="button secondary small" type="button" data-reset-layout>Reset order</button>
+            </div>
+            <div class="setting">
+              <div><h3>Sidebar</h3><p>Keep the navigation compact on wide screens.</p></div>
+              <button class="button secondary small" type="button" data-sidebar-collapse>Toggle compact sidebar</button>
+            </div>
+          </article>
+        </section>
+
+        <section id="help" class="app-section" aria-labelledby="help-title">
+          <h2 id="help-title" class="section-title">About this dashboard</h2>
+          <div class="grid-1-1">
+            <article class="card prose">
+              <h3>Business problem</h3>
+              <p>An online store's operations team needs to know, during the day, whether orders are coming in at the usual pace, whether payments are going through, and which categories carry revenue, so they can react to payment incidents before customers complain.</p>
+              <h3>Objective</h3>
+              <p>One screen that answers "are orders flowing and getting paid right now?", compares each figure with the previous 30 minutes, points at the one thing that needs attention, and lets the user drill into the order rows behind every number.</p>
+              <h3>How the numbers are defined</h3>
+              <dl class="defs">
+                <dt>Orders</dt><dd>Orders placed in the last 30 minutes, any status.</dd>
+                <dt>Completed revenue</dt><dd>Sum of order amounts whose payment completed. Pending, failed and refunded orders are excluded.</dd>
+                <dt>Payment success</dt><dd>Completed ÷ (completed + failed + refunded). Pending orders are left out of the denominator until they resolve.</dd>
+                <dt>Average order value</dt><dd>Completed revenue ÷ completed orders.</dd>
+                <dt>Change</dt><dd>Against the 30 minutes before, with every status evaluated now.</dd>
+              </dl>
+              <h3>What to look for</h3>
+              <ul>
+                <li>A drop in payment success with failures concentrated in one payment method points to a provider issue, not demand.</li>
+                <li>A rising open-order queue with steady order volume means confirmations are slow.</li>
+                <li>Revenue moving while order count is flat is a mix effect: check the category breakdown.</li>
+              </ul>
+              <h3>Built with</h3>
+              <p>HTML, CSS and plain JavaScript; SVG charts drawn without a charting library; Fetch API with a timeout and a local fallback. Read the <a class="text-link" href="../assets/js/ops-data.js">data model</a> and <a class="text-link" href="../assets/js/charts.js">chart code</a>.</p>
+            </article>
+            <article class="card prose">
+              <h3>Data sources</h3>
+              <p><strong>Orders are simulated</strong> in your browser and are not real business results. Each order decides its outcome when it is created, so KPIs, charts, the table and notifications are all computed from the same rows and always agree.</p>
+              <p><strong>The product catalog</strong> (names, categories, prices) is requested once from the public <a class="text-link" href="https://dummyjson.com/docs/products" target="_blank" rel="noreferrer">DummyJSON API</a>. If it cannot be reached, a local catalog with the same categories is used and the status line says so.</p>
+              <p><strong>Updates</strong> arrive by polling every few seconds, not by streaming: no free API used here pushes data.</p>
+              <div class="source-box" data-source-box aria-live="polite">
+                <div class="source-head"><h4>Catalog source</h4><span class="pill" data-source-pill>Loading</span></div>
+                <ul class="source-list" data-source-list>
+                  <li class="skeleton-line"><span class="skeleton"></span></li>
+                  <li class="skeleton-line"><span class="skeleton"></span></li>
+                  <li class="skeleton-line"><span class="skeleton"></span></li>
+                </ul>
+                <div class="source-error" data-source-error hidden>
+                  <p>The DummyJSON API could not be reached, so the local catalog is in use. Orders keep updating.</p>
+                  <button class="button secondary small" type="button" data-source-retry>Try again</button>
+                </div>
+              </div>
+              <h3>Limitations</h3>
+              <ul>
+                <li>Order volume, statuses and timings come from a random model, so no trend here reflects a real store.</li>
+                <li>History covers the last 70 minutes and restarts when the page reloads.</li>
+                <li>Notifications are demo events derived from the simulated rows.</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="kpi-menu" role="menu" data-kpi-menu hidden>
+    <button type="button" role="menuitem" data-move="first">Move to start</button>
+    <button type="button" role="menuitem" data-move="-1">Move earlier</button>
+    <button type="button" role="menuitem" data-move="1">Move later</button>
+    <button type="button" role="menuitem" data-move="last">Move to end</button>
+  </div>
+  <p class="visually-hidden" aria-live="polite" data-announce></p>
+</body>
+</html>

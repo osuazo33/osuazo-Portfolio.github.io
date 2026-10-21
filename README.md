@@ -24,14 +24,25 @@ Search the project for these placeholders and replace them:
 
 ```
 index.html  styles.css  script.js  404.html
+assets/js/    ops-data.js (order simulation + metrics), charts.js (SVG charts, no dependencies)
+dashboards/   operations-monitor.html + dashboard.css + dashboard.js (live demo)
 projects/     case-study pages (sales, recruiting, marketing)
 sql/          BigQuery starter queries
 docs/         data model, architecture and QA plan
-dashboards/   screenshots and dashboard links
 workflows/    exported n8n workflows (no credentials)
 data/         data notes (raw files are git-ignored)
-assets/       images and diagrams
 ```
+
+No build step and no npm dependencies: open `index.html` directly or serve the folder with any static server.
+
+## Operations Monitor (live demo)
+
+`dashboards/operations-monitor.html` is a real-time order dashboard with KPIs, animated charts, a sortable/paginated orders table, demo notifications, light/dark theme, a collapsible sidebar and reorderable KPI cards.
+
+- **Data honesty:** orders are **simulated in the browser**; the product catalog is fetched once from the public [DummyJSON API](https://dummyjson.com) with a 7 s timeout and a local fallback. The status line always says which mode is active.
+- **Updates:** polling every 3–5 s (configurable), paused automatically while the tab is hidden. No streaming API is used.
+- **Consistency:** every order decides its outcome when it is created, so KPIs, charts, table and notifications are computed from the same rows.
+- **Preferences** stored in `localStorage`: theme (`pf-theme`), KPI order, sidebar state, interval, rows per page.
 
 ## Flagship project: Olist Sales Intelligence
 
