@@ -1,0 +1,17 @@
+# Secrets: never commit these
+*.env
+.env*
+*service-account*.json
+*credentials*.json
+client_secret*.json
+n8n-credentials*
+
+# Raw datasets (large / licensed). Keep them local; document download steps instead.
+data/raw/
+data/*.csv
+*.zip
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
