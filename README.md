@@ -5,8 +5,6 @@ A responsive static portfolio for GitHub Pages, with project pages, BigQuery SQL
 ## Before publishing
 
 Search the project for these placeholders and replace them:
-- `YOUR-GITHUB-USERNAME`
-- `YOUR_EMAIL@example.com`
 - The About section (use your real experience and tools)
 - Dashboard links and screenshots once the reports are built
 - Any claim about results or tools you have not verified
