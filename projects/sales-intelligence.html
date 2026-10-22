@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Sales Intelligence case study: a reproducible BigQuery SQL model on the public Olist e-commerce dataset, with data-quality checks and a Looker Studio dashboard.">
+  <meta name="description" content="Sales Intelligence case study: a reproducible BigQuery SQL model on the public Olist e-commerce dataset, with data-quality checks and a published Looker Studio dashboard.">
   <title>Sales Intelligence | Portfolio</title>
   <script>(function(){var t;try{t=localStorage.getItem("pf-theme")}catch(e){}if(t!=="light"&&t!=="dark")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";var r=document.documentElement;r.setAttribute("data-theme",t);r.classList.add("js")})();</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,7 +40,7 @@
       <h1>Sales Intelligence &amp; Automated Revenue Pipeline</h1>
       <p class="lead">A reproducible analytics project using public ecommerce data to demonstrate SQL modeling, metric validation, reporting, and pipeline monitoring.</p>
       <dl class="case-facts">
-        <div><dt>Status</dt><dd>SQL written · dashboard in progress</dd></div>
+        <div><dt>Status</dt><dd>SQL written · dashboard live</dd></div>
         <div><dt>Data</dt><dd>Olist public dataset (Kaggle)</dd></div>
         <div><dt>Tools</dt><dd>BigQuery, SQL, Looker Studio</dd></div>
         <div><dt>Automation</dt><dd>n8n, planned</dd></div>
@@ -122,7 +122,7 @@
             <li><b>Source</b><span>CSV files imported into a dedicated BigQuery dataset.</span></li>
             <li><b>Transform</b><span>SQL staging and reporting queries with explicit grain and metric definitions.</span></li>
             <li><b>Validate</b><span>Uniqueness, missing values, referential integrity, and reconciliation checks.</span></li>
-            <li><b>Report</b><span>Looker Studio dashboard connected to a verified reporting view.</span></li>
+            <li><b>Report</b><span>Looker Studio dashboard connected to a verified reporting view (<a class="text-link" href="https://lookerstudio.google.com/reporting/ec3e756b-2a8a-48c7-b87c-4bfd03b2d180" target="_blank" rel="noreferrer">open ↗</a>).</span></li>
             <li class="is-planned"><b>Automate</b><span>Add n8n orchestration, execution logging, and failure notification once implemented.</span></li>
             <li class="is-planned"><b>Monitor</b><span>Record run timestamp, row counts, failed checks, and action taken.</span></li>
           </ol>
@@ -149,7 +149,12 @@
 
         <section id="dashboard">
           <h2>Dashboard</h2>
-          <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg><p>Dashboard link and screenshots will be added here once the Looker Studio report is built and public sharing has been tested. No KPI values are published until the SQL has run and the definitions are checked.</p></div>
+          <p>The Looker Studio report reads the validated monthly reporting view, so every chart uses the KPI definitions above.</p>
+          <p><a class="button primary" href="https://lookerstudio.google.com/reporting/ec3e756b-2a8a-48c7-b87c-4bfd03b2d180" target="_blank" rel="noreferrer">Open the dashboard in Looker Studio ↗</a></p>
+          <div class="report-embed">
+            <iframe src="https://lookerstudio.google.com/embed/reporting/ec3e756b-2a8a-48c7-b87c-4bfd03b2d180" title="Sales Intelligence dashboard in Looker Studio" loading="lazy" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
+          </div>
+          <p class="figure-caption">If the embedded report does not load, use the button above to open it in a new tab.</p>
         </section>
 
         <section id="findings">

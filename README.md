@@ -48,6 +48,8 @@ No build step and no npm dependencies: open `index.html` directly or serve the f
 
 Dataset: [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce).
 
+Dashboard: [Sales Intelligence in Looker Studio](https://lookerstudio.google.com/reporting/ec3e756b-2a8a-48c7-b87c-4bfd03b2d180)
+
 Recommended build order:
 1. Load CSVs into BigQuery.
 2. Run `sql/01_profile_source_data.sql`.
@@ -55,7 +57,7 @@ Recommended build order:
 4. Run `sql/03_data_quality_checks.sql`.
 5. Connect Looker Studio to a verified reporting view.
 6. Build the n8n workflow (scheduled load, run logging, failure alerts, idempotent reloads).
-7. Add screenshots and the public dashboard URL to the project page.
+7. ~~Add the public dashboard URL to the project page.~~ Done; screenshots still to add.
 8. Write the real findings and limitations in the case study.
 
 ## Dashboard checklist
