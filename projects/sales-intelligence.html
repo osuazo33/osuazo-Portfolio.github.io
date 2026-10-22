@@ -150,9 +150,15 @@
         <section id="dashboard">
           <h2>Dashboard</h2>
           <p>The Looker Studio report reads the validated monthly reporting view, so every chart uses the KPI definitions above.</p>
-          <p><a class="button primary" href="https://lookerstudio.google.com/reporting/ec3e756b-2a8a-48c7-b87c-4bfd03b2d180" target="_blank" rel="noreferrer">Open the dashboard in Looker Studio ↗</a></p>
-          <div class="report-embed">
-            <iframe src="https://lookerstudio.google.com/embed/reporting/ec3e756b-2a8a-48c7-b87c-4bfd03b2d180" title="Sales Intelligence dashboard in Looker Studio" loading="lazy" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
+          <div class="report-actions">
+            <a class="button primary" href="https://lookerstudio.google.com/reporting/ec3e756b-2a8a-48c7-b87c-4bfd03b2d180" target="_blank" rel="noreferrer">Open the dashboard in Looker Studio ↗</a>
+            <button class="button secondary" type="button" data-fullscreen="#sales-report" hidden>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>View full screen
+            </button>
+          </div>
+          <div class="report-embed" id="sales-report">
+            <div class="report-loading" aria-hidden="true"><span>Loading dashboard…</span></div>
+            <iframe src="https://lookerstudio.google.com/embed/reporting/ec3e756b-2a8a-48c7-b87c-4bfd03b2d180" title="Sales Intelligence dashboard in Looker Studio: monthly orders, average ticket, on-time delivery against goal, and item revenue versus payments" loading="lazy" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
           </div>
           <p class="figure-caption">If the embedded report does not load, use the button above to open it in a new tab.</p>
         </section>

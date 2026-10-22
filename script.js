@@ -40,6 +40,17 @@
   /* ---------- Footer year ---------- */
   document.querySelectorAll("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
 
+  /* ---------- Embedded reports: loading state and full screen ---------- */
+  document.querySelectorAll(".report-embed iframe").forEach(function (frame) {
+    frame.addEventListener("load", function () { frame.parentElement.classList.add("is-loaded"); });
+  });
+  document.querySelectorAll("[data-fullscreen]").forEach(function (btn) {
+    var target = document.querySelector(btn.getAttribute("data-fullscreen"));
+    if (!target || !document.fullscreenEnabled) return;
+    btn.hidden = false;
+    btn.addEventListener("click", function () { target.requestFullscreen(); });
+  });
+
   /* ---------- Header border once the page scrolls ---------- */
   var header = document.querySelector(".site-header");
   if (header) {

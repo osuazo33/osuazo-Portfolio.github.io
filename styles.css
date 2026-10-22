@@ -351,7 +351,8 @@ code { background: var(--raised); padding: 2px 6px; border-radius: 4px; overflow
 
 .case-layout {
   max-width: var(--max); margin: 0 auto; padding: clamp(48px, 7vw, 88px) var(--gutter) 0;
-  display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: clamp(32px, 6vw, 80px);
+  --case-gap: clamp(32px, 6vw, 80px);
+  display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: var(--case-gap);
 }
 .case-toc { position: sticky; top: 96px; align-self: start; display: grid; gap: 2px; font-size: 14px; }
 .case-toc a { color: var(--muted); text-decoration: none; padding: 6px 10px; border-radius: var(--radius-sm); transition: color .2s ease, background-color .2s ease; }
@@ -504,6 +505,34 @@ code { background: var(--raised); padding: 2px 6px; border-radius: 4px; overflow
 .seg-failed { stroke: var(--negative); }
 .seg-refunded { stroke: var(--faint); }
 
-.report-embed { margin-top: 20px; aspect-ratio: 4 / 3; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--surface); }
-.report-embed iframe { display: block; width: 100%; height: 100%; border: 0; }
-@media (max-width: 640px) { .report-embed { aspect-ratio: 3 / 4; } }
+/* Looker Studio embed. The report scales to the iframe's width, so the
+   box keeps the report's own proportions (--report-ratio) to avoid an inner
+   scroll. On wide screens it breaks out of the 760px text column to the
+   full case-layout width (100cqw), measured from the case-layout container. */
+.case-layout { container-type: inline-size; }
+.report-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+.report-actions svg { width: 16px; height: 16px; margin-right: 8px; }
+.report-embed {
+  --report-ratio: 11 / 10;
+  position: relative; margin-top: 24px; aspect-ratio: var(--report-ratio);
+  border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--raised);
+}
+.report-embed iframe { position: relative; display: block; width: 100%; height: 100%; border: 0; }
+.report-embed:fullscreen { border: 0; border-radius: 0; aspect-ratio: auto; }
+.report-loading {
+  position: absolute; inset: 0; display: grid; place-items: center; font-size: 14px; color: var(--faint);
+  background: linear-gradient(100deg, transparent 40%, var(--active) 50%, transparent 60%) var(--raised);
+  background-size: 200% 100%; animation: report-shimmer 1.6s linear infinite;
+}
+.report-embed.is-loaded .report-loading { display: none; }
+@keyframes report-shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+@media (prefers-reduced-motion: reduce) { .report-loading { animation: none; } }
+@media (min-width: 961px) {
+  .report-embed { width: 100cqw; margin-left: calc(-200px - var(--case-gap)); }
+}
+@media (max-width: 640px) {
+  /* Looker Studio scales the report to the iframe's width, so a taller box only adds
+     empty canvas. On phones the embed is a preview; opening the report is the main action. */
+  .report-actions .button { flex: 1 1 100%; }
+  .report-embed { pointer-events: none; }
+}
