@@ -17,7 +17,7 @@ GT = dt.timezone(dt.timedelta(hours=-6), "America/Guatemala")
 
 CONFIG = {
     # --- seed ---------------------------------------------------------------
-    "seed_random_seed": 8,             # picked from a 30-seed sweep as close to the target volumes
+    "seed_random_seed": 12,            # picked from a 40-seed sweep as close to the target volumes
     "seed_history_days": 180,         # days of history the seed generates
     "seed_lag_days": 4,               # seed ends at today - 4; the simulator fills the rest
     "bootstrap_jobs": 12,             # jobs opened during the first days of the history
@@ -348,7 +348,9 @@ class Engine:
         if s.candidate_ids and rng.random() >= cfg["new_candidate_share"]:
             for _ in range(5):
                 c = rng.choice(s.candidate_ids)
-                if c not in taken:
+                # candidates created in this run must exist before they apply again
+                new_row = s.candidate_rows.get(c)
+                if c not in taken and (new_row is None or new_row["created_at"] < t):
                     cand = c
                     break
         if cand is None:
