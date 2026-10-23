@@ -25,13 +25,15 @@ index.html  styles.css  script.js  404.html
 assets/js/    ops-data.js (order simulation + metrics), charts.js (SVG charts, no dependencies)
 dashboards/   operations-monitor.html + dashboard.css + dashboard.js (live demo)
 projects/     case-study pages (sales, recruiting, marketing)
-sql/          BigQuery starter queries
-docs/         data model, architecture and QA plan
+sql/          BigQuery starter queries; sql/recruiting/ is PostgreSQL (Supabase)
+scripts/      recruiting seed, daily simulator and SQL runner (Python)
+docs/         data model, architecture and QA plan; docs/recruiting/ for project 2
 workflows/    exported n8n workflows (no credentials)
+.github/      GitHub Actions: daily recruiting simulator
 data/         data notes (raw files are git-ignored)
 ```
 
-No build step and no npm dependencies: open `index.html` directly or serve the folder with any static server.
+No build step and no npm dependencies for the site: open `index.html` directly or serve the folder with any static server.
 
 ## Operations Monitor (live demo)
 
@@ -57,6 +59,14 @@ Recommended build order:
 6. Build the n8n workflow (scheduled load, run logging, failure alerts, idempotent reloads).
 7. ~~Add the public dashboard URL to the project page.~~ Done; screenshots still to add.
 8. Write the real findings and limitations in the case study.
+
+## Recruiting & Vacancy Performance
+
+Synthetic recruiting data in Supabase Postgres, advanced every day by a Python simulator
+on GitHub Actions, with SQL validations and KPIs and a local n8n email alert for aging
+and stale vacancies. Overview and architecture: [`docs/recruiting/README.md`](docs/recruiting/README.md);
+how to run it: [`docs/recruiting/runbook.md`](docs/recruiting/runbook.md).
+The Python scripts need `requirements.txt` and a `DATABASE_URL` in `.env` (see `.env.example`).
 
 ## Dashboard checklist
 

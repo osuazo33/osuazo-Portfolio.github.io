@@ -16,3 +16,5 @@ These are starter templates, not pre-validated results. Depending on how you imp
 | `02_sales_kpis.sql` | Monthly orders, item revenue, payments, on-time delivery |
 | `03_data_quality_checks.sql` | Duplicates, orphans, invalid values, missing dates |
 | `marketing_quality_template.sql` | GA4 sample starter (Project 3); the full analysis is in [`marketing/`](marketing/) |
+
+The recruiting project (PostgreSQL / Supabase, not BigQuery) is in [`recruiting/`](recruiting/): `04_simulation_tables.sql`, `05_validation.sql`, `06_kpis.sql`. See [`docs/recruiting/runbook.md`](../docs/recruiting/runbook.md).
