@@ -5,6 +5,7 @@
 *credentials*.json
 client_secret*.json
 n8n-credentials*
+!.env.example
 
 # Raw datasets (large / licensed). Keep them local; document download steps instead.
 data/raw/
@@ -21,3 +22,8 @@ Thumbs.db
 .claude/
 skills-lock.json
 .taste-skill/
+
+# Python / logs
+__pycache__/
+.venv/
+*.log
