@@ -536,3 +536,22 @@ code { background: var(--raised); padding: 2px 6px; border-radius: 4px; overflow
   .report-actions .button { flex: 1 1 100%; }
   .report-embed { pointer-events: none; }
 }
+
+/* Recruiting case study: KPI snapshot, four-step pipeline, screenshot slots.
+   A slot shows its expected filename until the image is added (the img removes
+   itself on error and marks the figure as missing). */
+.kpi-facts { margin-top: 20px; }
+.kpi-facts dd { font-size: clamp(20px, 2vw, 26px); letter-spacing: -.02em; }
+.kpi-facts dd small { display: block; margin-top: 2px; font-size: 13px; font-weight: 400; letter-spacing: 0; color: var(--faint); }
+.pipeline.is-four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.model-table td:first-child { white-space: nowrap; }
+.shot { margin: 24px 0 0; }
+.shot img { width: 100%; height: auto; border: 1px solid var(--border); border-radius: 12px; background: var(--raised); }
+.shot-missing { display: none; }
+.shot.is-missing .shot-missing {
+  display: grid; place-items: center; gap: 4px; min-height: 180px; padding: 24px; text-align: center;
+  border: 1px dashed var(--control); border-radius: 12px; font-size: 14px; color: var(--faint);
+}
+.shot figcaption { font-size: 13px; color: var(--faint); margin-top: 10px; }
+@media (max-width: 960px) { .pipeline.is-four { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 720px) { .pipeline.is-four { grid-template-columns: 1fr; } }

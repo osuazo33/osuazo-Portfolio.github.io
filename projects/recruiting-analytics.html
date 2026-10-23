@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Recruiting analytics brief: synthetic data model, funnel definitions, time-to-fill and vacancy aging KPIs, and an n8n alert plan.">
+  <meta name="description" content="Recruiting analytics on synthetic data that changes daily: Supabase Postgres model, Python simulator, validated SQL KPIs (time-to-fill, funnel conversion, vacancy aging) and an n8n aging alert.">
   <title>Recruiting Analytics | Portfolio</title>
   <script>(function(){var t;try{t=localStorage.getItem("pf-theme")}catch(e){}if(t!=="light"&&t!=="dark")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";var r=document.documentElement;r.setAttribute("data-theme",t);r.classList.add("js")})();</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,12 +38,12 @@
     <div class="case-hero">
       <a class="breadcrumb" href="../index.html#projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>All projects</a>
       <h1>Recruiting &amp; Vacancy Performance</h1>
-      <p class="lead">A synthetic recruiting data model to analyze open roles, candidate conversion, time-to-fill, and aging vacancies.</p>
+      <p class="lead">A recruiting reporting model on synthetic data that changes every day, with validated KPIs for open roles, candidate conversion, time-to-fill and aging vacancies.</p>
       <dl class="case-facts">
-        <div><dt>Status</dt><dd>Specification</dd></div>
-        <div><dt>Data</dt><dd>Synthetic records only</dd></div>
-        <div><dt>Tools</dt><dd>SQL, funnel analysis</dd></div>
-        <div><dt>Automation</dt><dd>n8n alert, planned</dd></div>
+        <div><dt>Status</dt><dd>Running on synthetic data</dd></div>
+        <div><dt>Data</dt><dd>Synthetic, simulated daily</dd></div>
+        <div><dt>Tools</dt><dd>PostgreSQL (Supabase), SQL, Python</dd></div>
+        <div><dt>Automation</dt><dd>n8n daily check and log</dd></div>
       </dl>
     </div>
 
@@ -53,8 +53,9 @@
         <a href="#model">Data model</a>
         <a href="#kpis">KPIs</a>
         <a href="#funnel">Funnel definitions</a>
-        <a href="#automation">Automation plan</a>
-        <a href="#findings">Dashboard and findings</a>
+        <a href="#results">Results</a>
+        <a href="#automation">Automation</a>
+        <a href="#evidence">Evidence</a>
       </nav>
       <div class="case-body">
         <section id="problem">
@@ -65,64 +66,132 @@
 
         <section id="model">
           <h2>Data model</h2>
-          <p>Use synthetic records only. Suggested tables: jobs, candidates, applications, recruiters. Give each entity a stable ID and define the grain of each table before joining.</p>
+          <p>PostgreSQL on Supabase, schema <code>recruiting</code>. Synthetic records only: candidates carry an ID, a region and a creation date, nothing personal. Stage dates, statuses and sources are enforced with <code>CHECK</code> constraints and foreign keys.</p>
           <div class="table-scroll">
-            <table class="data-table">
+            <table class="data-table model-table">
               <thead><tr><th>Table</th><th>Grain</th><th>Key fields</th></tr></thead>
               <tbody>
-                <tr><td><code>jobs</code></td><td>One row per vacancy</td><td>created_at, closed_at, status, department, recruiter_id</td></tr>
-                <tr><td><code>candidates</code></td><td>One row per synthetic candidate</td><td>candidate_id, no unnecessary personal attributes</td></tr>
-                <tr><td><code>applications</code></td><td>One candidate applying to one job</td><td>source, applied_at, current_stage, hired_at, rejected_at</td></tr>
-                <tr><td><code>recruiters</code></td><td>One row per recruiter</td><td>recruiter_id</td></tr>
+                <tr><td><code>recruiters</code></td><td>One row per recruiter</td><td>recruiter_id, team</td></tr>
+                <tr><td><code>requisition_queue</code></td><td>One approved requisition waiting to open</td><td>scheduled_open_date, status (queued, published, cancelled), job_id</td></tr>
+                <tr><td><code>jobs</code></td><td>One row per vacancy</td><td>created_at, last_updated_at, closed_at, status, department, recruiter_id</td></tr>
+                <tr><td><code>candidates</code></td><td>One row per synthetic candidate</td><td>candidate_id, region, created_at</td></tr>
+                <tr><td><code>applications</code></td><td>One candidate applying to one job</td><td>source, current_stage, applied_at, screened_at, interviewed_at, offer_at, hired_at, rejected_at</td></tr>
+                <tr><td><code>application_events</code></td><td>One stage transition</td><td>application_id, from_stage, to_stage, event_at</td></tr>
+                <tr><td><code>simulation_runs</code></td><td>One simulated day</td><td>sim_date (unique), counts of changes, status</td></tr>
+                <tr><td><code>automation_runs</code></td><td>One n8n alert run</td><td>run_at, jobs_checked, jobs_flagged, flagged_job_ids, alert_sent, status</td></tr>
               </tbody>
             </table>
           </div>
-          <p>See <a class="text-link" href="../docs/recruiting-data-model.md">the proposed data model</a>.</p>
+          <p>See <a class="text-link" href="../docs/recruiting/data_model.md">the data model</a> and <a class="text-link" href="../docs/recruiting/synthetic_data.md">how the data is generated</a>.</p>
         </section>
 
         <section id="kpis">
           <h2>KPIs</h2>
           <ul>
             <li>Open vacancies as of the reporting date</li>
-            <li>Time-to-fill, with a documented start and end date</li>
+            <li>Time-to-fill, from vacancy creation to the first accepted offer</li>
             <li>Application-to-interview and interview-to-hire conversion</li>
             <li>Vacancy aging buckets and stale-update alerts</li>
             <li>Candidate source effectiveness, with sample-size caveats</li>
           </ul>
+          <p>Every query and its definition is in <a class="text-link" href="../sql/recruiting/06_kpis.sql"><code>06_kpis.sql</code></a>.</p>
         </section>
 
         <section id="funnel">
           <h2>Funnel definitions</h2>
           <div class="panel">
-            <div class="panel-title"><h3>Each conversion has one numerator and one denominator</h3><small>Definitions, no results</small></div>
+            <div class="panel-title"><h3>Each conversion has one numerator and one denominator</h3><small>Definitions used for the results below</small></div>
             <div class="table-scroll">
               <table class="data-table">
                 <thead><tr><th>Metric</th><th>Numerator</th><th>Denominator</th></tr></thead>
                 <tbody>
-                  <tr><td>Application to interview</td><td>Distinct applications that reached interview</td><td>Distinct eligible applications in the cohort</td></tr>
-                  <tr><td>Interview to hire</td><td>Distinct applications that reached hire</td><td>Distinct applications that reached interview</td></tr>
+                  <tr><td>Application to interview</td><td>Distinct applications with an interview date</td><td>Distinct applications in the cohort</td></tr>
+                  <tr><td>Interview to hire</td><td>Distinct applications with a hire date</td><td>Distinct applications with an interview date</td></tr>
                   <tr><td>Vacancy aging</td><td colspan="2">Reporting date minus creation date, for vacancies open on that date</td></tr>
-                  <tr><td>Time to fill</td><td colspan="2">Creation to accepted offer or to closure: one definition, applied consistently</td></tr>
+                  <tr><td>Time to fill</td><td colspan="2">Vacancy creation to the first accepted offer (<code>hired_at</code>); filled vacancies only</td></tr>
                 </tbody>
               </table>
             </div>
+            <p class="figure-caption">Cohort: applications submitted 30 to 180 days before the reporting date. The last 30 days are left out because those candidates have not had time to reach interview or hire.</p>
+          </div>
+        </section>
+
+        <section id="results">
+          <h2>Results</h2>
+          <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg><p><strong>Synthetic data.</strong> These figures come from generated records, updated every day by a simulator, not from a real company. They show that the model, the definitions and the checks work. They are not hiring benchmarks. This is a snapshot; the live database moves on every day.</p></div>
+          <p>As of <strong>22 Oct 2026, 21:08 Guatemala time</strong>, with activity simulated through 21 Oct. All 26 validation checks in <a class="text-link" href="../sql/recruiting/05_validation.sql"><code>05_validation.sql</code></a> returned 0 failing rows.</p>
+          <dl class="case-facts kpi-facts">
+            <div><dt>Open vacancies</dt><dd>15<small>plus 1 on hold</small></dd></div>
+            <div><dt>Time to fill, median</dt><dd>41.1 days<small>average 44.3; n = 40 filled</small></dd></div>
+            <div><dt>Application to interview</dt><dd>16.7%<small>212 of 1,269</small></dd></div>
+            <div><dt>Interview to hire</dt><dd>17.9%<small>38 of 212</small></dd></div>
+          </dl>
+          <dl class="case-facts kpi-facts">
+            <div><dt>Open 46+ days</dt><dd>5<small>of 15 open</small></dd></div>
+            <div><dt>No update in 14+ days</dt><dd>2<small>J0045 (47 days), J0055 (25)</small></dd></div>
+            <div><dt>Applications</dt><dd>1,543<small>830 candidates</small></dd></div>
+            <div><dt>Vacancies created</dt><dd>63<small>5 departments</small></dd></div>
+          </dl>
+
+          <div class="panel">
+            <div class="panel-title"><h3>Vacancy aging</h3><small>Open vacancies by days since creation</small></div>
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead><tr><th>Days open</th><th>0&ndash;15</th><th>16&ndash;30</th><th>31&ndash;45</th><th>46&ndash;60</th><th>60+</th></tr></thead>
+                <tbody><tr><td>Open vacancies</td><td>6</td><td>2</td><td>2</td><td>1</td><td>4</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-title"><h3>Source effectiveness</h3><small>Conversion cohort, n beside each rate</small></div>
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead><tr><th>Source</th><th>Applications</th><th>To interview</th><th>Interview to hire</th><th>Application to hire</th></tr></thead>
+                <tbody>
+                  <tr><td>Referral</td><td>164</td><td>25.6%</td><td>26.2% <small class="muted">(n = 42)</small></td><td>6.7%</td></tr>
+                  <tr><td>Agency</td><td>112</td><td>21.4%</td><td>20.8% <small class="muted">(n = 24)</small> <span class="pill is-medium">n &lt; 30</span></td><td>4.5%</td></tr>
+                  <tr><td>LinkedIn</td><td>454</td><td>19.2%</td><td>17.2% <small class="muted">(n = 87)</small></td><td>3.3%</td></tr>
+                  <tr><td>Career site</td><td>211</td><td>14.7%</td><td>19.4% <small class="muted">(n = 31)</small></td><td>2.8%</td></tr>
+                  <tr><td>Job board</td><td>328</td><td>8.5%</td><td>3.6% <small class="muted">(n = 28)</small> <span class="pill is-medium">n &lt; 30</span></td><td>0.3%</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="figure-caption">The ranking follows the simulation parameters (referrals are generated to convert best and job boards worst), so it confirms the queries rather than revealing anything about real sourcing. Rates with fewer than 30 cases in the denominator are flagged.</p>
           </div>
         </section>
 
         <section id="automation">
-          <h2>Automation plan</h2>
-          <p>Build an n8n workflow that checks open roles daily, identifies roles above a configurable aging threshold, logs each run, and sends a test alert. Mark it as implemented only after it runs successfully.</p>
-          <ol class="pipeline">
-            <li class="is-planned"><b>Daily trigger</b><span>Scheduled run reads open vacancies.</span></li>
-            <li class="is-planned"><b>Threshold check</b><span>Roles above the configurable aging limit are flagged.</span></li>
-            <li class="is-planned"><b>Log and alert</b><span>Each run is logged; flagged roles send a test alert.</span></li>
+          <h2>Automation</h2>
+          <p>A Python simulator advances the data once a day: queued requisitions open, applications arrive (more for new vacancies), candidates move through the funnel, offers fill vacancies, and a share of vacancies is left untouched for weeks so the alert has real cases. It is idempotent, catches up missed days and logs each day in <code>simulation_runs</code>. An hour later an n8n workflow checks the open vacancies.</p>
+          <ol class="pipeline is-four">
+            <li><b>Daily trigger</b><span>Runs at 08:00 Guatemala time and reads the open vacancies.</span></li>
+            <li><b>Threshold check</b><span>Flags vacancies open 45+ days or with no update in 14+ days.</span></li>
+            <li><b>Run log</b><span>Every run writes checked and flagged counts to <code>automation_runs</code>.</span></li>
+            <li class="is-planned"><b>Email alert</b><span>Sends an HTML table of the flagged vacancies.</span></li>
           </ol>
-          <p class="figure-caption">Dashed steps are planned and not yet implemented.</p>
+          <p class="figure-caption">The dashed step is built and will be marked implemented once an alert with flagged vacancies has been received.</p>
+          <p>See the <a class="text-link" href="../docs/recruiting/README.md">architecture</a> and the <a class="text-link" href="../docs/recruiting/runbook.md">runbook</a>.</p>
         </section>
 
-        <section id="findings">
-          <h2>Dashboard and findings</h2>
-          <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg><p>This is a project specification, not a claim that a live system already exists. The published dashboard URL, verified KPIs, screenshots, and evidence-based recommendations will be added after implementation.</p></div>
+        <section id="evidence">
+          <h2>Evidence</h2>
+          <figure class="shot">
+            <img src="../dashboards/recruiting-n8n-workflow.png" alt="The vacancy_aging_alert workflow in the n8n editor" loading="lazy" onerror="this.parentNode.classList.add('is-missing');this.remove()">
+            <div class="shot-missing">Screenshot pending<code>dashboards/recruiting-n8n-workflow.png</code></div>
+            <figcaption>The <code>vacancy_aging_alert</code> workflow in n8n.</figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="../dashboards/recruiting-alert-email.png" alt="Alert email listing the flagged vacancies" loading="lazy" onerror="this.parentNode.classList.add('is-missing');this.remove()">
+            <div class="shot-missing">Screenshot pending<code>dashboards/recruiting-alert-email.png</code></div>
+            <figcaption>The alert email with the flagged vacancies.</figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="../dashboards/recruiting-automation-runs.png" alt="Rows of the automation_runs table" loading="lazy" onerror="this.parentNode.classList.add('is-missing');this.remove()">
+            <div class="shot-missing">Screenshot pending<code>dashboards/recruiting-automation-runs.png</code></div>
+            <figcaption>The <code>automation_runs</code> log, one row per run.</figcaption>
+          </figure>
+          <p class="figure-caption">Limitations: the data is synthetic, and n8n runs on a local machine, so the alert only runs while that PC is on.</p>
         </section>
       </div>
     </div>
