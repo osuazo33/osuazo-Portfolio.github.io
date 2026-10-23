@@ -2,7 +2,7 @@ Osman — Data Analytics & Automation Portfolio
 
 End-to-end analytics projects built the way I work day to day: SQL first, validated numbers, automated pipelines, and dashboards people can actually use.
 
-I work on a Reporting team at Alorica (Samsung and Home Depot accounts), where I build Python automation, data-processing pipelines, SQL Server loads and Excel/OneDrive reporting workflows. I'm also studying a B.S. in Data Science and Artificial Intelligence at Unitec. This repository is the public, non-confidential side of that work: every project here uses public or synthetic data.
+I worked on a Reporting team at Alorica , where I build Python automation, data-processing pipelines, SQL Server loads and Excel/OneDrive reporting workflows. I'm also studying a B.S. in Data Science and Artificial Intelligence at Unitec. This repository is the public, non-confidential side of that work: every project here uses public or synthetic data.
 
 🌐 Live site: published with GitHub Pages from this repository (index.html at the root). 🗣️ Spanish (native) · English (fluent)
 
