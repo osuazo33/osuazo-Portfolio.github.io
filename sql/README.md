@@ -15,4 +15,4 @@ These are starter templates, not pre-validated results. Depending on how you imp
 | `01_profile_source_data.sql` | Row counts, nulls, distinct keys, order status distribution |
 | `02_sales_kpis.sql` | Monthly orders, item revenue, payments, on-time delivery |
 | `03_data_quality_checks.sql` | Duplicates, orphans, invalid values, missing dates |
-| `marketing_quality_template.sql` | GA4 sample starter (Project 3) |
+| `marketing_quality_template.sql` | GA4 sample starter (Project 3); the full analysis is in [`marketing/`](marketing/) |

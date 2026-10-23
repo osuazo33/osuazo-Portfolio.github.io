@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Marketing analytics brief: GA4 ecommerce funnel definitions and data-quality checks in BigQuery.">
+  <meta name="description" content="Marketing data quality case study: GA4 ecommerce funnel, traffic-source obfuscation, purchase validation and four automated data-quality checks in BigQuery.">
   <title>Marketing Analytics &amp; Quality | Portfolio</title>
   <script>(function(){var t;try{t=localStorage.getItem("pf-theme")}catch(e){}if(t!=="light"&&t!=="dark")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";var r=document.documentElement;r.setAttribute("data-theme",t);r.classList.add("js")})();</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,9 +40,9 @@
       <h1>Marketing Attribution &amp; Quality Monitor</h1>
       <p class="lead">Analyze ecommerce events and design repeatable checks for data completeness, freshness, and consistency.</p>
       <dl class="case-facts">
-        <div><dt>Status</dt><dd>Specification</dd></div>
+        <div><dt>Status</dt><dd>Analysis and checks complete</dd></div>
         <div><dt>Data</dt><dd>GA4 public ecommerce sample</dd></div>
-        <div><dt>Tools</dt><dd>BigQuery, SQL</dd></div>
+        <div><dt>Tools</dt><dd>BigQuery, SQL, Python</dd></div>
         <div><dt>Focus</dt><dd>Funnel and data quality</dd></div>
       </dl>
     </div>
@@ -51,9 +51,12 @@
       <nav class="case-toc" aria-label="On this page">
         <a href="#problem">Business problem</a>
         <a href="#data">Data source</a>
-        <a href="#metrics">Metrics</a>
+        <a href="#funnel">Funnel</a>
+        <a href="#traffic">Traffic sources</a>
+        <a href="#purchases">Purchases</a>
+        <a href="#metrics">Not reported</a>
         <a href="#quality">Data quality</a>
-        <a href="#sql">SQL and dashboard</a>
+        <a href="#sql">SQL and findings</a>
       </nav>
       <div class="case-body">
         <section id="problem">
@@ -64,40 +67,86 @@
 
         <section id="data">
           <h2>Data source</h2>
-          <p>Google Analytics 4 public ecommerce sample: <code>bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*</code>. Start with a small date range and inspect the schema before developing funnel logic.</p>
+          <p>Google Analytics 4 public ecommerce sample: <code>bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*</code>, 92 daily tables from 1 November 2020 to 31 January 2021 with no missing day. Google obfuscates the sample: revenue is rounded to whole numbers and some traffic sources are masked as <code>&lt;Other&gt;</code> or <code>(data deleted)</code>.</p>
+          <p>Every query filters on <code>_TABLE_SUFFIX</code>, reads only the columns it needs and was dry-run first; the largest scanned 0.27 GB. Two weeks are analysed: <strong>1&ndash;7 Nov 2020</strong>, the first week of the sample, and <strong>1&ndash;7 Dec 2020</strong>, a full week after add-to-cart tracking resumed on 26 Nov.</p>
+        </section>
+
+        <section id="funnel">
+          <h2>Funnel</h2>
+          <p>A user reaches <em>add to cart</em> if it happens at or after their first product view, and <em>purchase</em> if it happens at or after that add to cart. A session is <code>user_pseudo_id</code> + <code>ga_session_id</code>.</p>
+          <div class="panel">
+            <div class="panel-title"><h3>Users, 1&ndash;7 Dec 2020</h3><small>Share of users who viewed a product</small></div>
+            <div class="compare" role="img" aria-label="User funnel, 1 to 7 December 2020: 6,780 viewed a product, 2,296 added to cart, 433 purchased">
+              <div class="compare-row"><span>Viewed a product</span><span class="compare-track"><span class="compare-bar" style="--v:1"></span></span><span class="num">6,780</span></div>
+              <div class="compare-row"><span>Added to cart &middot; 33.9%</span><span class="compare-track"><span class="compare-bar" style="--v:.339"></span></span><span class="num">2,296</span></div>
+              <div class="compare-row"><span>Purchased &middot; 6.4%</span><span class="compare-track"><span class="compare-bar" style="--v:.064"></span></span><span class="num">433</span></div>
+            </div>
+            <p class="figure-caption">Sessions: 7,807 &rarr; 2,563 &rarr; 414 (32.8%, 5.3%). Cart to purchase: 18.9% of users, 16.2% of sessions.</p>
+          </div>
+          <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg><p><strong>Tracking gap:</strong> <code>add_to_cart</code> has 0 rows from 2 to 15 Nov and from 21 to 24 Nov, while product views and purchases are recorded every day. In the first week 224 users purchased and 1 user has an add-to-cart event, so no November funnel is reported. Even in December, 103 of 537 purchasing users (19%) have no add-to-cart event, so cart to purchase is a lower bound.</p></div>
+        </section>
+
+        <section id="traffic">
+          <h2>Traffic sources</h2>
+          <p><code>traffic_source</code> is the source that first acquired the user; the <code>source</code>, <code>medium</code> and <code>campaign</code> keys in <code>event_params</code> are per session. <code>collected_traffic_source</code> does not exist in this export.</p>
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead><tr><th>1&ndash;7 Nov 2020</th><th class="num">Share</th></tr></thead>
+              <tbody>
+                <tr><td>Users with an obfuscated first-touch source, medium or campaign</td><td class="num">36.8%</td></tr>
+                <tr><td>Users whose <code>traffic_source</code> changes within the week</td><td class="num">16.1%</td></tr>
+                <tr><td>Sessions carrying a source in <code>event_params</code></td><td class="num">74.7%</td></tr>
+                <tr><td>&hellip;of which the source is obfuscated</td><td class="num">24.3%</td></tr>
+                <tr><td>Sessions attributed to the store&rsquo;s own domain (self-referral)</td><td class="num">17.6%</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="figure-caption">Top session sources: google / organic 5,447, store self-referral 4,468, (direct) 3,082; 6,434 sessions carry no source on any event.</p>
+        </section>
+
+        <section id="purchases">
+          <h2>Purchases</h2>
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead><tr><th>Week</th><th class="num">Purchase events</th><th class="num">Transactions</th><th class="num">Duplicated IDs</th><th class="num">Revenue, deduplicated</th><th class="num">Per transaction</th></tr></thead>
+              <tbody>
+                <tr><td>1&ndash;7 Nov 2020</td><td class="num">273</td><td class="num">270</td><td class="num">3</td><td class="num">$18,535</td><td class="num">$68.65</td></tr>
+                <tr><td>1&ndash;7 Dec 2020</td><td class="num">614</td><td class="num">580</td><td class="num">7</td><td class="num">$39,090</td><td class="num">$67.40</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <ul>
+            <li>In November <code>ecommerce.transaction_id</code> is <code>(not set)</code> or empty on every purchase; the ID is only in <code>event_params</code>. The transaction key uses the ecommerce ID when it is real, otherwise the parameter.</li>
+            <li>Summing every purchase event would overstate revenue by $298 (1.6%) in November and $340 (0.9%) in December.</li>
+            <li>Purchase revenue, the <code>value</code> parameter and item revenue agree within 0.1%; gaps per event are at most $0.50, from rounding.</li>
+          </ul>
         </section>
 
         <section id="metrics">
-          <h2>Metrics</h2>
-          <ul>
-            <li>Users and sessions by source, medium, and campaign when those fields are available and correctly extracted</li>
-            <li>Product view, add-to-cart and purchase funnel, with event definitions documented</li>
-            <li>Purchase event counts and purchase value, validated against the chosen schema</li>
-            <li>Cost per acquisition and ROAS only if reliable campaign spend and attributable conversions are available</li>
-          </ul>
-          <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg><p>ROAS requires a valid campaign-spend dataset and attributable revenue. It is not reported until those inputs are available.</p></div>
+          <h2>What is not reported</h2>
+          <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg><p>ROAS and cost per acquisition need campaign spend, and this dataset has none. They are not calculated.</p></div>
         </section>
 
         <section id="quality">
           <h2>Data quality</h2>
-          <p>Record the test name, run timestamp, affected row count, severity, and resolution for each validation.</p>
+          <p>A Python script runs four checks and logs the test name, run timestamp, affected rows, severity and resolution of each.</p>
           <div class="table-scroll">
             <table class="data-table">
-              <thead><tr><th>Check</th><th>Rule</th><th>Severity</th></tr></thead>
+              <thead><tr><th>Check</th><th>Severity</th><th>1&ndash;7 Nov</th><th>1&ndash;7 Dec</th></tr></thead>
               <tbody>
-                <tr><td>Missing user identifiers</td><td><code>user_pseudo_id IS NULL</code> per day and event</td><td><span class="pill is-high">High</span></td></tr>
-                <tr><td>Duplicated transaction IDs</td><td>More than one purchase event per transaction</td><td><span class="pill is-high">High</span></td></tr>
-                <tr><td>Unexpected event volume</td><td>Daily rows outside a documented baseline range</td><td><span class="pill is-medium">Medium</span></td></tr>
-                <tr><td>Stale data</td><td>No events for the latest expected date</td><td><span class="pill is-medium">Medium</span></td></tr>
+                <tr><td>Missing user identifiers</td><td><span class="pill is-high">High</span></td><td><span class="pill is-positive">Pass · 0 rows</span></td><td><span class="pill is-positive">Pass · 0 rows</span></td></tr>
+                <tr><td>Duplicated transaction IDs</td><td><span class="pill is-high">High</span></td><td><span class="pill is-high">Fail · 3 IDs</span></td><td><span class="pill is-high">Fail · 7 IDs</span></td></tr>
+                <tr><td>Unexpected event volume</td><td><span class="pill is-medium">Medium</span></td><td><span class="pill is-positive">Pass</span></td><td><span class="pill is-medium">Fail · 3 days</span></td></tr>
+                <tr><td>Stale data</td><td><span class="pill is-medium">Medium</span></td><td><span class="pill is-positive">Pass</span></td><td><span class="pill is-positive">Pass</span></td></tr>
               </tbody>
             </table>
           </div>
-          <p class="figure-caption">Severity levels are proposed and will be confirmed when the checks run.</p>
+          <p class="figure-caption">Volume baseline: daily rows over 1&ndash;28 Nov 2020 excluding the days being checked, mean &plusmn; 3 SD (weekday 38,070&ndash;69,521, weekend 19,660&ndash;51,345 for the December run). The December failures (about 71,700 rows on 1, 3 and 7 Dec) are the seasonal peak, so a production version needs a rolling baseline. Stale data uses the latest table in the dataset (31 Jan 2021) as the expected date.</p>
         </section>
 
         <section id="sql">
-          <h2>SQL and dashboard</h2>
-          <p>Start with <a class="text-link" href="../sql/marketing_quality_template.sql">the SQL starter template</a>, which profiles event rows and missing user IDs over one week. The published dashboard URL and findings will be added only after validation.</p>
+          <h2>SQL, checks and findings</h2>
+          <p>One file per step in <a class="text-link" href="https://github.com/osuazo33/osuazo-Portfolio.github.io/tree/main/sql/marketing">sql/marketing ↗</a>, the checks script and its log in <a class="text-link" href="https://github.com/osuazo33/osuazo-Portfolio.github.io/tree/main/checks">checks ↗</a>, and the full write-up with definitions and limitations in <a class="text-link" href="https://github.com/osuazo33/osuazo-Portfolio.github.io/blob/main/findings.md">findings.md ↗</a>.</p>
         </section>
       </div>
     </div>

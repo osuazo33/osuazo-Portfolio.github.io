@@ -176,25 +176,26 @@
 
         <article class="project is-flipped reveal">
           <div class="project-figure">
-            <ul class="check-list" aria-label="Example data-quality checks">
-              <li>Missing user identifiers <span class="pill is-high">High</span></li>
-              <li>Duplicated transaction IDs <span class="pill is-high">High</span></li>
-              <li>Unexpected event volume <span class="pill is-medium">Medium</span></li>
-              <li>Stale data, no load today <span class="pill is-medium">Medium</span></li>
+            <ul class="check-list" aria-label="Data-quality check results for the first week">
+              <li>Missing user identifiers <span class="pill is-positive">Pass</span></li>
+              <li>Duplicated transaction IDs <span class="pill is-high">Fail &middot; 3 IDs</span></li>
+              <li>Unexpected event volume <span class="pill is-positive">Pass</span></li>
+              <li>Stale data <span class="pill is-positive">Pass</span></li>
             </ul>
-            <p class="figure-caption">Each check logs its name, run time, affected rows, severity and resolution.</p>
+            <p class="figure-caption">Results for 1&ndash;7 Nov 2020. Each check logs its name, run time, affected rows, severity and resolution.</p>
           </div>
           <div class="project-body">
-            <span class="project-status">Specification · public GA4 sample</span>
+            <span class="project-status is-live">Validated findings · public GA4 sample</span>
             <h3>Marketing Attribution &amp; Quality Monitor</h3>
-            <p>Analyze ecommerce events and define data-quality checks for missing, duplicate, or unexpected records.</p>
+            <p>Product funnel, traffic sources and purchase validation on GA4 ecommerce events, with four automated quality checks that found a two-week add-to-cart tracking gap and duplicated transactions.</p>
             <dl class="project-facts">
               <dt>Data</dt><dd>GA4 obfuscated ecommerce sample in BigQuery</dd>
-              <dt>Built with</dt><dd>BigQuery, monitoring, funnel definitions</dd>
+              <dt>Built with</dt><dd>BigQuery SQL, Python checks, funnel definitions</dd>
             </dl>
             <div class="project-links">
-              <a href="projects/marketing-quality.html">Read the brief <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-              <a href="sql/marketing_quality_template.sql">SQL template</a>
+              <a href="projects/marketing-quality.html">Read the case study <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+              <a href="https://github.com/osuazo33/osuazo-Portfolio.github.io/blob/main/findings.md" target="_blank" rel="noreferrer">Findings ↗</a>
+              <a href="https://github.com/osuazo33/osuazo-Portfolio.github.io/tree/main/sql/marketing" target="_blank" rel="noreferrer">SQL files ↗</a>
             </div>
           </div>
         </article>
