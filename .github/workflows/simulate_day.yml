@@ -1,0 +1,52 @@
+# Runs the synthetic recruiting simulator once a day, before the n8n alert.
+# 13:00 UTC = 07:00 America/Guatemala (UTC-6, no daylight saving); n8n runs at 08:00.
+# The simulator is idempotent, so a manual run on the same day only catches up
+# missing days and never repeats one.
+name: Simulate recruiting day
+
+on:
+  schedule:
+    - cron: "0 13 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Show the changes without writing them"
+        type: boolean
+        default: false
+
+concurrency:
+  group: recruiting-simulator
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  simulate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Simulate missing days
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "::error::Repository secret DATABASE_URL is not set"
+            exit 1
+          fi
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            python scripts/simulate_day.py --dry-run
+          else
+            python scripts/simulate_day.py
+          fi
